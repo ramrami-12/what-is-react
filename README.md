@@ -1,5 +1,9 @@
 # what-is-react
 
+* [fastcampus](https://fastcampus.co.kr/) 
+* 한 번에 끝내는 프론트엔드 개발 초격차 패키지 Online 강의를 들으면서 작성한 내용입니다!
+
+
 - error or issues
     
     Warning: ReactDOM.render is no longer supported in React 18. Use createRoot instead. Until you switch to the new API, your app will behave as if it's running React 17. Learn more: [https://reactjs.org/link/switch-to-createroot](https://reactjs.org/link/switch-to-createroot)
