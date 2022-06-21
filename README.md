@@ -1,7 +1,6 @@
 # what-is-react
 
-* [fastcampus](https://fastcampus.co.kr/) 
-* 한 번에 끝내는 프론트엔드 개발 초격차 패키지 Online 강의를 들으면서 작성한 내용입니다!
+* [fastcampus](https://fastcampus.co.kr/) 한 번에 끝내는 프론트엔드 개발 초격차 패키지 Online 강의를 들으면서 작성한 내용입니다!
 
 
 - error or issues
