@@ -1,6 +1,10 @@
 # what-is-react
 
-- error or issues
+다음은 노션에 정리 된 내용을 readme에 작성한 내용입니다
+[원본 노션 링크](https://www.notion.so/REACT-82a9a44bed6c443f93418508e17c120e)
+_완성후 파일 첨부 예정!_
+
+<details><summary>error or issues</summary>
     
     Warning: ReactDOM.render is no longer supported in React 18. Use createRoot instead. Until you switch to the new API, your app will behave as if it's running React 17. Learn more: [https://reactjs.org/link/switch-to-createroot](https://reactjs.org/link/switch-to-createroot)
     
@@ -10,7 +14,7 @@
     <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
     ```
-    
+</details>
 
 # Ch1. React Getting Started
 
