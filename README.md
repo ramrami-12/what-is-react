@@ -833,6 +833,7 @@ ReactDOM.render(<Component />, document.querySelector("#root"));
     ```
 
     1. package.json
+    - "react-scripts": react app , 이 버전은 프로젝트의 버전과 같다.
 
     ```json
     "dependencies": {
@@ -841,7 +842,7 @@ ReactDOM.render(<Component />, document.querySelector("#root"));
         "@testing-library/user-event": "^13.5.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "react-scripts": "5.0.1", //react app , 이 버전은 프로젝트의 버전과 같다.
+        "react-scripts": "5.0.1", 
         "web-vitals": "^2.1.4"
       },
     ```
