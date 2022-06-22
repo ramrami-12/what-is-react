@@ -6,65 +6,131 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>React Example</title>
-    <!-- 
-    <style>
-        * {
-            margin: 0;
-            border: 0;
-            padding: 0;
-        }
-
-        #root p {
-            color: white;
-            font-size: 20px;
-            background-color: green;
-            text-align: center;
-            width: 200px;
-        }
-
-        #btn_plus {
-            background-color: red;
-            border: 2px solid #000000;
-            font-size: 15px;
-            width: 200px;
-        }
-    </style> -->
 </head>
 
 <body>
-    <div id="root"></div>
-    <!-- Change react@18 -> react@17 -->
+    <div id="root">
+        <h1>This is Main Page</h1>
+    </div>
     <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <!-- <script type="text/javascript"> -->
     <script type="text/babel">
-        // function Component(props) {
-        //     return (
-        //         <div>
-        //             <h1>{props.message} 이것은 함수로 만든 컴포넌트 입니다.</h1>
-        //         </div>
-        //     );
+        // class App extends React.Component {
+        //     state = {
+        //         age: 39,
+        //     };
+        //     constructor(props) {
+        //         super(props);
+        //         console.log('constructor', props);
+        //     }
+        //     interval = null;
+        //     render() {
+        //         console.log('render');
+        //         return (
+        //             <div>
+        //                 <h2>
+        //                     Hello {this.props.name} - {this.state.age}
+        //                 </h2>
+        //             </div>
+        //         );
+        //     }
+        //     // 시간의 흐름에 따라 변하는 props에 state가 의존하는 특수한 상황에 사용
+        //     static getDerivedStateFromProps(nextProps, prevState){
+        //         console.log('getDerivedStateFromProps', nextProps, prevState);
+        //         return {
+        //             age: 300,
+        //         } // => age가 301이 될 때 다시 300 으로 설정된다 
+        //     }
+        //     componentDidMount() {
+        //         console.log('componentDidMount')
+
+        //         this.interval = setInterval(() => {
+        //             // console.log("setInterval")
+        //             this.setState((state) => ({ ...state, age: state.age + 1 }))
+        //         }, 1000)
+        //     }
+        //     // componentWillReceiveProps(nextProps) {
+        //     //     console.log('componentWillReceiveProps', nextProps);
+        //     // };
+        //     shouldComponentUpdate(nextProps, nextState) {
+        //         console.log('shouldComponentUpdate', nextProps, nextState); // {name: 'Mark'} {age: 40}
+        //         return true; // or false -> 다음 단계로 넘어가지 않음 (render가 되지 않아 화면이 그대로)
+        //     }
+        //     // componentWillUpdate(nextProps, nextState) {
+        //     //     console.log('componentWillUpdate', nextProps, nextState); // {name: 'Mark'} {age: 40} -> 40이 화면에 보여지는 숫자
+        //     // }
+        //     //render
+        //     componentDidUpdate(prevProps, prevState) {
+        //         console.log('componentDidUpdate', prevProps, prevState); // {name: 'Mark'} {age: 38}
+        //     }
+        //     componentWillUnMount(){
+        //         // 호출해놓은 setInterval을 여기서 없애줘야함 -> 안그러면 어디선가 계속 돌아가고 있을 interval..
+        //         clearInterval(this.interval);
+        //     }
+        // }
+        // let i = 0;
+
+        // class App extends React.Component {
+        //     state = {list : []};
+
+        //     render(){
+        //         return (
+        //             <div id="list" style={{height: 100, overflow: "scroll", }}>
+        //                 {this.state.list.map((i) => {
+        //                     return <div>{i}</div>;
+        //                 })}
+        //                 </div>
+        //         );
+        //     }
+
+        //     componentDidMount(){
+        //         setInterval(() => {
+        //             this.setState((state) => ({
+        //                 list: [...state.list, i++],
+        //             }));
+        //         }, 1000)
+        //     }
+
+        //     // render 전의 scroll 상태와 후의 scroll 상태를 비교해서 맞춰주기
+        //     getSnapshotBeforeUpdate(prevProps, prevState) {
+        //         if(prevState.list.length === this.state.list.length) {
+        //             return null;
+        //         }
+        //         const list = document.querySelector('#list');
+        //         return list.scrollHeight - list.scrollTop; // 이 값을 snapshot으로 저장
+        //     }
+
+        //     componentDidUpdate(prevProps, prevState, snapshot) {
+        //         console.log(snapshot); // snapshot 잘 저장됐는지
+        //         // lenghth가 같으면 null 이 들어올 것이고 다르면 값이 들어올 것
+        //         if(snapshot === null){
+        //             false;
+        //         }
+        //         const list = document.querySelector('#list');
+        //         list.scrollTop = list.scrollHeight - snapshot;
+        //     } // 새로운 값이 생겨서 화면이 아래로 값이 생길 때 스크롤이 자동으로 내려가도록 만듦
+
+
         // }
 
-        class Component extends React.Component {
+        class App extends React.Component {
+            state = {
+                hssError: false
+            };
             render() {
-                return (
-                    <div>
-                        <h1>{this.props.message} 이것은 클래스로 만든 컴포넌트 입니다.</h1>
-                    </div>
-                );
+                if (this.state.hssError) {
+                    return <div>예상치 못한 에러가 발생했다.</div>
+                }
+                return <WebService />;
+            }
+            componentDidCatch(error, info){
+                this.setState({ hasError: true });
             }
         }
 
-        // 1.
-        Component.defaultProps = {
-            message: "기본 값",
-        }
-        ReactDOM.render(
-            <Component message="안녕하세요!!!" />,
-            document.querySelector("#root")
-        );
+
+        ReactDOM.render(<App name="Mark" />, document.querySelector('#root'))
     </script>
 </body>
 

@@ -50,22 +50,15 @@ ex)
 - DOM을 직접 제어하는 경우: 바뀐 부분만 정확히 바꿔야 한다
 - DOM을 직접 제어하지 않는 경우: 가상의 돔 트리를 사용해서 이전 상태와 이후 상태를 비교하여 바뀐 부분을 찾아내서 자동으로 바꾼다
 
-![Virtual Dom](https://www.notion.so/REACT-82a9a44bed6c443f93418508e17c120e#eda2a3c87f9b426580a74384f6af93bd)
-
 ### JSX (templates이 아니라 순수한 JS로 transpile 되는 문법)
 
 ### CSR(Client Side Rendering)
-
-![CSR](https://www.notion.so/REACT-82a9a44bed6c443f93418508e17c120e#e48cae0e66334a2da1b1379b21b62394)
 
 - 빈 html 다운 → html 안에 있는 JS → react web/app을 실행 → componet 가 그려지면 보여짐
 - JS가 전부 다운로드 되어 리액트 어플리케이션이 정상 실행 되기 전까지는 화면이 보이지 않음
 - JS가 전부 다운로드 되어 리액트 어플리케이션이 정상 실행된 후, 화면이 보이면서 유저가 인터렉션 가능
 
 ### SSR(Server Side Rendering)
-
-![SSR](https://www.notion.so/REACT-82a9a44bed6c443f93418508e17c120e#0e4178e4d18c49ab9d965845a65cd005)
-
 - 사실 상 동작의 차이는 없으나 SSR 할 때 html rendering 후 기능은 동작하지 않아도 보여지는 것은 보여진다
 - JS가 전부 다운로드 되지 않아도 일단 화면은 보이지만 유저가 사용할 수는 없음
 - JS가 전부 다운로드 되어 리액트 어플리케이션이 정상 실행된 후, 유저가 사용 가능
@@ -415,8 +408,6 @@ babel 은 이전 버전 혹은 쓰이지 않는 코드를 작성하여도 현재
 </script>
 ```
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/886a6d51-b4c2-4ed4-82c5-f7489af57a4b/Untitled.png)
-
 - 왜 JSX를 쓰나요?
     - 가독성
     - 컴파일 과정에서 문법적 오류를 찾기 쉬움 (엄격한 기준)
@@ -553,3 +544,332 @@ ReactDOM.render(<Component />, document.querySelector("#root"));
     		return newState;
     });
     ```
+
+    ## Event Handling
+
+    - HTML DOM에 클릭하면 이벤트가 발생하고, 그 이벤트를 처리 할 수 있어야 한다
+    - JSX에 이벤트를 설정할 수 있다 ⇒ 이벤트 처리하는 부분이 props로 들어가서 실제 Element이면 실제 Element에서 이벤트 발생
+    - 규칙
+        - camelCase로만 사용할 수 있다 * onClick, onMouseEnter
+        - 이벤터에 연결된 자바스크립트 코드는 함수 * 이벤트={함수}
+        - 실제 DOM 요소들에만 사용 가능
+            - 리엑트 컴포넌트에 사용하면 그냥 props로 전달
+    1. 기본형 - function 
+
+    ```jsx
+    function Component() {
+        return (
+            <div>
+                <button onClick={() => {
+                    console.log('clicked')
+                }}>
+                    클릭
+                </button>
+            </div>
+        );
+    }
+    ReactDOM.render(<Component />, document.querySelector('#root'))
+    ```
+
+    1. 기본형 - class
+
+    ```jsx
+    class Component extends React.Component {
+        state = {
+            count: 0,
+        };
+        render() {
+            return (
+                <div>
+                    <p>{this.state.count}</p>
+                    <button onClick={() => {
+                        console.log('clicked')
+                        this.setState((state) => ({ ...state, count: state.count + 1 }));
+                    }}>
+                        클릭
+                    </button>
+                </div>
+            );
+        }
+    }
+    ReactDOM.render(<Component />, document.querySelector('#root'))
+    ```
+
+    1. 함수 따로 빼서 쓰기
+
+    ```jsx
+    class Component extends React.Component {
+            state = {
+                count: 0,
+            };
+            // 함수 따로 빼서 쓰기 1) constructor를 만들어서 binding
+            // constructor(props) {
+            //     super(props);
+            //     this.click = this.click.bind(this);
+            // }
+            render() {
+                return (
+                    <div>
+                        <p>{this.state.count}</p>
+                        <button onClick={this.click}>
+                            클릭
+                        </button>
+                    </div>
+                );
+            }
+            // 이렇게 따로 빼기만 하면 setState undefined 에러 발생
+            // click() {
+            //     console.log('clicked')
+            //     this.setState((state) => ({ ...state, count: state.count + 1 }));
+            // }
+            // 함수 따로 빼서 쓰기 2) using arrow function
+            click = () => {
+                console.log('clicked')
+                this.setState((state) => ({ ...state, count: state.count + 1 }));
+            }
+            
+        }
+        ReactDOM.render(<Component />, document.querySelector('#root'))
+    </script>
+    ```
+
+    ## Component Lifecycle (< v16.3 )
+
+    - lifecycle: 리엑트 컴포넌트의 탄생부터 죽음까지 (브라우저에서 그려지는 순간부터 사라지는 순간까지)
+    - 여러 지점에서 개발자가 작업이 가능하도록 method를 overiding 할 수 있게 해준다
+    - Declarative : 탄생부터 죽음까지 순간 순간을 선언적으로 표현 해놓으면 컴포넌트가 해당 상황이 되면 그 함수를 실행시킨다
+        - Initalization: constructor 가 불리면서 초기값(props, state) 세팅
+        - Mounting: render 직전 - render - render 직후 // 여기까지 그려지는 단계
+        - Updation: 상태 변경
+        - Unmounting: 컴포넌트 종료
+
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/78ddc565-36d4-4a5c-80c8-c1cb30e8d481/Untitled.png)
+
+    - warning
+        
+        react-dom.development.js:61 Warning: componentWillMount has been renamed, and is not recommended for use. See [https://reactjs.org/link/unsafe-component-lifecycles](https://reactjs.org/link/unsafe-component-lifecycles) for details.
+        
+        v16.3 이하에서 사용 가능하지만 곧 없어질 것을 경고
+        
+    1. componentWillReceiveProps
+        - props를 새로 지정했을 때 바로 호출됨
+        - state의 변경에 반응하지 않는다
+            - props의 값에 따라 state를 변경해야 한다면, setState 를 이용해야 한다 → 다음 이벤트로 각각 가는 것이 아니라 한번에 변경된다
+    2. shouldComponentUpdate
+        - props나 state 둘 중 하나가 변경되거나 둘다 변경되도 호출된다
+        - newProps와 newState를 인자로 한다
+        - return type이 boolean이다 : true면 render, false면 render가 호출되지 않는다 (default는 true)
+    3. componentWillUpdate
+        - 컴포넌트가 재렌더링 되기 직전에 불린다
+        - setState 사용 x
+    4. componentDidUpdate
+        - 컴포넌트가 재렌더링을 마치면 불린다 (렌더링 직후)
+    5. code & 추가 설명
+        
+        ```html
+        <script type="text/babel">
+          class App extends React.Component {
+                state = {
+                    age: 39,
+                };
+                constructor(props) {
+                    super(props);
+                    console.log('constructor', props);
+                }
+                interval = null;
+                render() {
+                    console.log('render');
+                    return (
+                        <div>
+                            <h2>
+                                Hello {this.props.name} - {this.state.age}
+                            </h2>
+                        </div>
+                    );
+                };
+        		    // component 마운트 & 생성
+        		    // componentWillReceiveProps, shouldComponentUpdate, componentWillUpdate, render, componentDidUpdate
+                componentWillMount() {
+                    console.log('componentWillMount')
+                }
+                componentDidMount() {
+                    console.log('componentDidMount')
+        
+                    this.interval = setInterval(() => {
+                        // console.log("setInterval")
+                        this.setState((state) => ({ ...state, age: state.age + 1 }))
+                    }, 1000)
+                }
+                componentWillReceiveProps(nextProps) {
+                    console.log('componentWillReceiveProps', nextProps);
+                };
+                shouldComponentUpdate(nextProps, nextState) {
+                    console.log('shouldComponentUpdate', nextProps, nextState);
+                    return true; // or false -> 다음 단계로 넘어가지 않음 (render가 되지 않아 화면이 그대로)
+                }
+                UNSAFE_componentWillUpdate(nextProps, nextState) {
+                    console.log('componentWillUpdate', nextProps, nextState);
+                }
+                //render
+                componentDidUpdate(prevProps, prevState) {
+                    console.log('componentDidUpdate', prevProps, prevState);
+                }
+                componentWillUnMount(){
+                    // 호출해놓은 setInterval을 여기서 없애줘야함 -> 안그러면 어디선가 계속 돌아가고 있을 interval..
+                    clearInterval(this.interval);
+                }
+            }
+        
+            ReactDOM.render(<App name="Mark" />, document.querySelector('#root'))
+        </script>
+        ```
+        
+        1. v 16.3 바뀐 component lifecycle
+            - componentWillMount ⇒ getDerivedStateFromProps
+            - render, componentDidMount
+            - componentWillReceiveProps ⇒ getDerivedStateFromProps
+            - shouldComponentUpdate, render
+            - componentWillUpdate ⇒ getSnapshotBeforeUpdate : dom에 적용될 직후에 상태를 저장했따가
+                - (dom에 적용)
+            - componentDidUpdate : dom에 적용된 뒤 update
+            - componentWillUnmount
+            - code
+                
+                ```html
+                <script type="text/babel">			
+                	let i = 0;
+                	
+                	class App extends React.Component {
+                        state = {list : []};
+                
+                        render(){
+                            return (
+                                <div id="list" style={{height: 100, overflow: "scroll", }}>
+                                    {this.state.list.map((i) => {
+                                        return <div>{i}</div>;
+                                    })}
+                                    </div>
+                            );
+                        }
+                
+                        componentDidMount(){
+                            setInterval(() => {
+                                this.setState((state) => ({
+                                    list: [...state.list, i++],
+                                }));
+                            }, 1000)
+                        }
+                
+                        // render 전의 scroll 상태와 후의 scroll 상태를 비교해서 맞춰주기
+                        getSnapshotBeforeUpdate(prevProps, prevState) {
+                            if(prevState.list.length === this.state.list.length) {
+                                return null;
+                            }
+                            const list = document.querySelector('#list');
+                            return list.scrollHeight - list.scrollTop; // 이 값을 snapshot으로 저장
+                        }
+                
+                        componentDidUpdate(prevProps, prevState, snapshot) {
+                            console.log(snapshot); // snapshot 잘 저장됐는지
+                            // lenghth가 같으면 null 이 들어올 것이고 다르면 값이 들어올 것
+                            if(snapshot === null){
+                                false;
+                            }
+                            const list = document.querySelector('#list');
+                            list.scrollTop = list.scrollHeight - snapshot;
+                        } // 새로운 값이 생겨서 화면이 아래로 값이 생길 때 스크롤이 자동으로 내려가도록 만듦
+                	}
+                
+                	ReactDOM.render(<App name="Mark" />, document.querySelector('#root'))
+                </script>
+                ```
+                
+        
+        2. component 에러 캐치
+        
+        error boundary: 자기 자신한테 문제가 생기면 잡아내지 못한다는 단점이 있다 → 검사하고자 하는 객체를 자식으로 만들기
+        
+        [doc](https://ko.reactjs.org/docs/error-boundaries.html)
+        
+        ```jsx
+        class App extends React.Component {
+            state = {
+                hssError: false
+            };
+            render() {
+                if (this.state.hssError) {
+                    return <div>예상치 못한 에러가 발생했다.</div>
+                }
+                return <WebService />;
+            }
+            componentDidCatch(error, info){
+                this.setState({ hasError: true });
+            }
+        }
+        ```
+        
+
+    ---
+
+    # Ch3. Creating React Project
+
+    ## Create React App
+
+    - CRA (Create React App)
+
+    [Create React App](https://create-react-app.dev/)
+
+    [https://github.com/facebook/create-react-app](https://github.com/facebook/create-react-app)
+
+    1. npx: npm 5.2.0 이상부터 함께 설치된 커맨드라인 명령어 
+
+    ```
+    // 프로젝트 생성 (node 프로젝트)
+    npx create-react-app "name"
+    ```
+
+    1. package.json
+
+    ```json
+    "dependencies": {
+        "@testing-library/jest-dom": "^5.16.4",
+        "@testing-library/react": "^13.3.0",
+        "@testing-library/user-event": "^13.5.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-scripts": "5.0.1", //react app , 이 버전은 프로젝트의 버전과 같다.
+        "web-vitals": "^2.1.4"
+      },
+    ```
+
+    1. production 모드는 코드가 작고 못생겼다(최적화 되어 있음) → 수정 x
+
+    ```json
+    npm run build // compile을 실행하고 source code를 작고 못생기게(?) 배포용(production용) 파일로 만들어준다 
+
+    npm install -g serve // server 설치
+    serve -s build // npm serve -s build -> 쓸 때마다 새로운 serve 사용
+    ```
+
+    1. testing: jest 기반
+
+    ```json
+    npm test
+    ```
+
+    1. eject : create react app에서 꺼내서 개발하겠다 → create react app에서 제공하지 않는 환경에서 개발하고 싶을 때, 꺼내서 자유롭게 쓸 때 
+        - open source에서 잘 관리 되고 있는데 꺼내면 문제 생길 수 있음,, : 신중하게 결정해야함
+        - eject 하고 나면 많은 dependency가 추가 되고 test 파일이 생긴다
+
+    ```json
+    npm run eject
+    ```
+
+    1. 정리
+        - npm start
+        - npm run build
+        - npm test
+        - npm run eject
+    2. react project가 화면에 보여지는 원리
+
+    - webpack: 우리가 작성한 파일(js, jsx, css, 파일 등) 확장자에 맞는 loader에 위임하는 것 → 이것이 CRA에 설정되어 있다
