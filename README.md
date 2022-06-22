@@ -848,7 +848,7 @@ ReactDOM.render(<Component />, document.querySelector("#root"));
 
     1. production 모드는 코드가 작고 못생겼다(최적화 되어 있음) → 수정 x
 
-    ```json
+    ```text
     npm run build // compile을 실행하고 source code를 작고 못생기게(?) 배포용(production용) 파일로 만들어준다 
 
     npm install -g serve // server 설치
@@ -857,7 +857,7 @@ ReactDOM.render(<Component />, document.querySelector("#root"));
 
     1. testing: jest 기반
 
-    ```json
+    ```text
     npm test
     ```
 
@@ -865,7 +865,7 @@ ReactDOM.render(<Component />, document.querySelector("#root"));
         - open source에서 잘 관리 되고 있는데 꺼내면 문제 생길 수 있음,, : 신중하게 결정해야함
         - eject 하고 나면 많은 dependency가 추가 되고 test 파일이 생긴다
 
-    ```json
+    ```text
     npm run eject
     ```
 
